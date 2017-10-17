@@ -1,4 +1,4 @@
-FROM nubs/composer-build:latest
+FROM coolersport/php-composer:latest
 
 MAINTAINER Spencer Rinehart <anubis@overthemonkey.com>
 
