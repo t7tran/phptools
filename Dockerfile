@@ -3,7 +3,8 @@ FROM coolersport/php-composer:latest
 MAINTAINER Spencer Rinehart <anubis@overthemonkey.com>
 
 # Setup phpunit dependencies (including optional)
-RUN pecl install xdebug && \
+RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
+    pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     docker-php-ext-install mbstring
 
@@ -12,5 +13,7 @@ RUN pecl install xdebug && \
 # phpunit dependency in its composer.json and that version of phpunit would be
 # used instead.
 RUN composer global require phpunit/phpunit:*
+
+USER alpine
 
 CMD ["phpunit"]
