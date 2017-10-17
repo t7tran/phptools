@@ -1,19 +1,30 @@
-FROM coolersport/php-composer:latest
+FROM php:7.0-alpine
 
 MAINTAINER Spencer Rinehart <anubis@overthemonkey.com>
 
-# Setup phpunit dependencies (including optional)
+ENV COMPOSER_HOME /.composer
+ENV PATH $COMPOSER_HOME/vendor/bin:$PATH
+
 RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
+    apk add --update --virtual composer-deps autoconf alpine-sdk && \
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
-    docker-php-ext-install mbstring
+    docker-php-ext-install mbstring && \
+    apk del composer-deps && \
+    rm -rf /apk /tmp/* /var/cache/apk/* && \
+    mkdir -p /home/alpine/.composer/vendor/bin && \
+    chown -R alpine:alpine /home/alpine/.composer && \
+    mkdir /code && \
+    chown alpine:alpine /code && \
+    mkdir -p $COMPOSER_HOME/vendor/bin && \
+    curl -sSL https://getcomposer.org/installer | \ 
+    php -- --install-dir=$COMPOSER_HOME/vendor/bin --filename=composer
 
-# Install the most recent stable phpunit.  This is more or less a fallback for
-# the default use case.  It is expected that a project would specify its own
-# phpunit dependency in its composer.json and that version of phpunit would be
-# used instead.
-RUN composer global require phpunit/phpunit:*
+ENV COMPOSER_HOME /home/alpine/.composer
+ENV PATH $COMPOSER_HOME/vendor/bin:$PATH
 
 USER alpine
+WORKDIR /code
 
-CMD ["phpunit"]
+ENTRYPOINT ["composer"]
+CMD ["--help"]
