@@ -7,6 +7,7 @@ ENV PATH /code/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
 RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     apk add --update --virtual composer-deps autoconf alpine-sdk && \
+    apk add jq xmlstarlet && \
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     docker-php-ext-install mbstring && \
