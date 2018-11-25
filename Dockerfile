@@ -7,7 +7,7 @@ ENV PATH /code/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
 RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     apk add --update --virtual composer-deps autoconf alpine-sdk && \
-    apk add bash jq xmlstarlet \
+    apk add bash git jq xmlstarlet \
     # install gd, zip
             zip unzip \
             coreutils \
