@@ -15,18 +15,21 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
             libjpeg-turbo-dev \
             libltdl \
             libmcrypt-dev \
-            libpng-dev && \
+            libpng-dev \
+            imap-dev krb5-dev openssl-dev && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
+    docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install -j$(nproc) \
+            mbstring \
             gd \
             zip \
             opcache \
+            imap \
             pdo_mysql \
             mysqli && \
     # finish
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
-    docker-php-ext-install mbstring && \
     apk del composer-deps && \
     rm -rf /apk /tmp/* /var/cache/apk/* && \
     mkdir /code && \
