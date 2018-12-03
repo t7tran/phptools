@@ -6,17 +6,17 @@ ENV COMPOSER_HOME /.composer
 ENV PATH /code/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
 RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
-    apk add --update --virtual composer-deps autoconf alpine-sdk && \
+    apk add --update --virtual mod-deps autoconf alpine-sdk \
+            freetype-dev \
+            libjpeg-turbo-dev \
+            libmcrypt-dev \
+            libpng-dev \
+            imap-dev krb5-dev openssl-dev && \
     apk add bash git jq xmlstarlet \
     # install gd, zip
             zip unzip \
             coreutils \
-            freetype-dev \
-            libjpeg-turbo-dev \
-            libltdl \
-            libmcrypt-dev \
-            libpng-dev \
-            imap-dev krb5-dev openssl-dev && \
+            libltdl && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
     docker-php-ext-install -j$(nproc) \
@@ -30,7 +30,7 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     # finish
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
-    apk del composer-deps && \
+    apk del mod-deps && \
     rm -rf /apk /tmp/* /var/cache/apk/* && \
     mkdir /code && \
     chown alpine:alpine /code && \
