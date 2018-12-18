@@ -7,13 +7,14 @@ ENV PATH /code/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
 RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     apk add --update --virtual mod-deps autoconf alpine-sdk \
-            freetype-dev \
-            libjpeg-turbo-dev \
             libmcrypt-dev \
-            libpng-dev \
             imap-dev krb5-dev openssl-dev && \
+    # gd dependencies
+    apk add freetype-dev \
+            libjpeg-turbo-dev \
+            libpng-dev && \
+    # install other tools
     apk add bash git jq xmlstarlet \
-    # install gd, zip
             zip unzip \
             coreutils \
             libltdl && \
