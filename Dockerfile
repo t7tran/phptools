@@ -8,7 +8,10 @@ ENV PATH /code/bin:$COMPOSER_HOME/vendor/bin:$PATH
 RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     apk add --update --virtual mod-deps autoconf alpine-sdk \
             libmcrypt-dev \
-            imap-dev krb5-dev openssl-dev && \
+            # build time imap dependencies
+            krb5-dev openssl-dev && \
+    # imap dependencies
+    apk add imap-dev && \
     # gd dependencies
     apk add freetype-dev \
             libjpeg-turbo-dev \
