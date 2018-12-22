@@ -29,6 +29,10 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
             imap \
             pdo_mysql \
             mysqli && \
+    # install runkit
+    wget https://github.com/runkit7/runkit7/releases/download/1.0.9/runkit-1.0.9.tgz -O /tmp/runkit.tgz && \
+    pecl install /tmp/runkit.tgz && \
+    echo -e 'extension=runkit.so\nrunkit.internal_override=On' > /usr/local/etc/php/conf.d/docker-php-ext-runkit.ini && \
     # finish
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
