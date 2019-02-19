@@ -17,6 +17,7 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     # install other tools
     apk add bash git jq xmlstarlet \
             zip unzip \
+            apache2-utils \
             coreutils \
             libltdl && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
