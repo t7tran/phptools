@@ -37,6 +37,8 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     # install uopz
     pecl install uopz && \
     docker-php-ext-enable uopz && \
+    # allow exit/die by default
+    echo uopz.exit=1 >> /usr/local/etc/php/conf.d/docker-php-ext-uopz.ini && \
     # install xdebug
     pecl install xdebug && \
     # disable xdebug as it interferes with uopz
