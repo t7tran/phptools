@@ -35,6 +35,10 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     pecl install /tmp/runkit.tgz && \
     echo -e 'extension=runkit.so\nrunkit.internal_override=On' > /usr/local/etc/php/conf.d/docker-php-ext-runkit.ini && \
     # finish
+    # install uopz
+    pecl install uopz && \
+    docker-php-ext-enable uopz && \
+    # finish
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
     apk del mod-deps && \
