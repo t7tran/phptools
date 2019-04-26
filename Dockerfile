@@ -40,7 +40,8 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     docker-php-ext-enable uopz && \
     # finish
     pecl install xdebug && \
-    docker-php-ext-enable xdebug && \
+    # disable xdebug as it interferes with uopz
+    # docker-php-ext-enable xdebug && \
     apk del mod-deps && \
     rm -rf /apk /tmp/* /var/cache/apk/* && \
     mkdir /code && \
