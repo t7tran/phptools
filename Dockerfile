@@ -2,6 +2,8 @@ FROM php:7.2-alpine
 
 MAINTAINER Spencer Rinehart <anubis@overthemonkey.com>
 
+COPY entrypoint.sh /
+
 ENV COMPOSER_HOME /.composer
 ENV PATH /code/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
@@ -41,11 +43,12 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     echo uopz.exit=1 >> /usr/local/etc/php/conf.d/docker-php-ext-uopz.ini && \
     # install xdebug
     pecl install xdebug && \
+    docker-php-ext-enable xdebug && \
     # disable xdebug as it interferes with uopz
-    # docker-php-ext-enable xdebug && \
-    # clean up
-    apk del mod-deps && \
-    rm -rf /apk /tmp/* /var/cache/apk/* && \
+    mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.disabled && \
+    # setup
+    chmod +x /entrypoint.sh && \
+    chown alpine:alpine /usr/local/etc/php/conf.d/* && \
     # configure working folder
     mkdir /code && \
     chown alpine:alpine /code && \
@@ -54,11 +57,15 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     chmod 777 $COMPOSER_HOME/cache && \
     mkdir -p $COMPOSER_HOME/vendor/bin && \
     curl -sSL https://getcomposer.org/installer | \ 
-    php -- --install-dir=$COMPOSER_HOME/vendor/bin --filename=composer
+    php -- --install-dir=$COMPOSER_HOME/vendor/bin --filename=composer && \
+    # clean up
+    apk del mod-deps && \
+    rm -rf /apk /tmp/* /var/cache/apk/*
 
 USER alpine
 WORKDIR /code
 
 VOLUME /.composer/cache
 
+ENTRYPOINT ["/entrypoint.sh"]
 CMD ["echo", "Please specify a command to run, e.g. composer install"]
