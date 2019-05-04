@@ -41,6 +41,11 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     docker-php-ext-enable uopz && \
     # allow exit/die by default
     echo uopz.exit=1 >> /usr/local/etc/php/conf.d/docker-php-ext-uopz.ini && \
+    # install pcov
+    pecl install pcov && \
+    docker-php-ext-enable pcov && \
+    # disable pcov by default
+    mv /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini.disabled && \
     # install xdebug
     pecl install xdebug && \
     docker-php-ext-enable xdebug && \
