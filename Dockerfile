@@ -21,9 +21,12 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     # gd dependencies
     apk add freetype-dev \
             libjpeg-turbo-dev \
-            libpng-dev && \
+            libpng-dev \
+    # gmp dependencies
+            gmp-dev && \
     docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ && \
     docker-php-ext-configure imap --with-kerberos --with-imap-ssl && \
+    docker-php-ext-configure gmp && \
     docker-php-ext-install -j$(nproc) \
             mbstring \
             gd \
@@ -31,7 +34,8 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
             opcache \
             imap \
             pdo_mysql \
-            mysqli && \
+            mysqli \
+            gmp && \
     # install runkit
     wget https://github.com/runkit7/runkit7/releases/download/2.0.3/runkit7-2.0.3.tgz -O /tmp/runkit.tgz && \
     pecl install /tmp/runkit.tgz && \
