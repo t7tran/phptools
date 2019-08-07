@@ -57,7 +57,7 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.disabled && \
     # setup
     chmod +x /entrypoint.sh && \
-    chown alpine:alpine /usr/local/etc/php/conf.d/* && \
+    chown -R alpine:alpine /usr/local/etc/php/conf.d && \
     # configure working folder
     mkdir /code && \
     chown alpine:alpine /code && \
