@@ -1,4 +1,4 @@
-FROM php:7.2-alpine
+FROM php:7.2.34-alpine
 
 MAINTAINER Spencer Rinehart <anubis@overthemonkey.com>
 
@@ -41,7 +41,7 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     pecl install /tmp/runkit.tgz && \
     echo -e 'extension=runkit.so\nrunkit.internal_override=On' > /usr/local/etc/php/conf.d/docker-php-ext-runkit.ini && \
     # install uopz
-    pecl install uopz && \
+    pecl install uopz-6.1.1 && \
     docker-php-ext-enable uopz && \
     # allow exit/die by default
     echo uopz.exit=1 >> /usr/local/etc/php/conf.d/docker-php-ext-uopz.ini && \
@@ -51,7 +51,7 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     # disable pcov by default
     mv /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini /usr/local/etc/php/conf.d/docker-php-ext-pcov.ini.disabled && \
     # install xdebug
-    pecl install xdebug && \
+    pecl install xdebug-2.9.0 && \
     docker-php-ext-enable xdebug && \
     # disable xdebug as it interferes with uopz
     mv /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini.disabled && \
@@ -66,7 +66,7 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     chmod 777 $COMPOSER_HOME/cache && \
     mkdir -p $COMPOSER_HOME/vendor/bin && \
     curl -sSL https://getcomposer.org/installer | \ 
-    php -- --install-dir=$COMPOSER_HOME/vendor/bin --filename=composer && \
+    php -- --install-dir=$COMPOSER_HOME/vendor/bin --1 --filename=composer && \
     # clean up
     apk del mod-deps && \
     rm -rf /apk /tmp/* /var/cache/apk/*
