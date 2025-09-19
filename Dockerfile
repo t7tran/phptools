@@ -4,8 +4,8 @@ MAINTAINER Spencer Rinehart <anubis@overthemonkey.com>
 
 COPY entrypoint.sh /
 
-ENV COMPOSER_HOME /.composer
-ENV PATH /code/bin:$COMPOSER_HOME/vendor/bin:$PATH
+ENV COMPOSER_HOME=/.composer \
+    PATH=/code/bin:$COMPOSER_HOME/vendor/bin:$PATH
 
 RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     apk add --update --virtual mod-deps autoconf alpine-sdk \
@@ -66,7 +66,7 @@ RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     chmod 777 $COMPOSER_HOME/cache && \
     mkdir -p $COMPOSER_HOME/vendor/bin && \
     curl -sSL https://getcomposer.org/installer | \ 
-    php -- --install-dir=$COMPOSER_HOME/vendor/bin --1 --filename=composer && \
+    php -- --install-dir=$COMPOSER_HOME/vendor/bin --filename=composer && \
     # clean up
     apk del mod-deps && \
     rm -rf /apk /tmp/* /var/cache/apk/*
