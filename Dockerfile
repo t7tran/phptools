@@ -5,7 +5,7 @@ MAINTAINER Spencer Rinehart <anubis@overthemonkey.com>
 COPY entrypoint.sh /
 
 ENV COMPOSER_HOME=/.composer \
-    PATH=/code/bin:$COMPOSER_HOME/vendor/bin:$PATH
+    PATH=/code/bin:/.composer/vendor/bin:$PATH
 
 RUN addgroup alpine && adduser -G alpine -s /bin/sh -D alpine && \
     apk add --update --virtual mod-deps autoconf alpine-sdk \
